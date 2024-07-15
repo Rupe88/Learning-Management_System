@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import nodemailer, {Transporter} from "nodemailer";
 import ejs from "ejs";
 import path from "path";

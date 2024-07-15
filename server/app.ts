@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 require("dotenv").config();
 import { Request, Response, NextFunction } from "express";
 import { ErrorMiddleware } from "./middleware/error";
-
+import userRouter from "./routes/userRoute";
 //middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -23,6 +23,8 @@ app.get("/test", (req: Request, res: Response, next: NextFunction) => {
     success: true,
   });
 });
+//api
+app.use("/api/auth", userRouter);
 
 //for unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
