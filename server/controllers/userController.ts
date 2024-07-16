@@ -7,6 +7,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/sendMail";
+import { sendToken } from "../utils/jwt";
 
 //register user
 interface IRegistration {
@@ -26,11 +27,11 @@ export const registerUSer = CatchAsyncError(
         );
       }
 
-      //what if email exists ??
-      const isEmailExist = await UserModel.findOne({ email });
-      if (isEmailExist) {
-        return next(new ErrorHandler("email already exists", 400));
-      }
+      // //what if email exists ??
+      // const isEmailExist = await UserModel.findOne({ email });
+      // if (isEmailExist) {
+      //   return next(new ErrorHandler("email already exists", 400));
+      // }
       //suppose user have name email and password
       const user: IRegistration = {
         name,
@@ -125,15 +126,53 @@ const user=await UserModel.create({
   password
 });
 
+
 res.status(200).json({
   success:true,
-  message:"activate successfully"
+  message:"activate successfully",
+  user
+ 
 
 })
 
     
   } catch (error:any) {
     return next(new ErrorHandler(error.message, 400));
+    
+  }
+});
+
+
+//login user
+interface ILoginRequest{
+  email:string;
+  password:string;
+
+}
+
+export const loginUSer=CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+  try {
+    const {email, password}=req.body as ILoginRequest;
+    if(!email || !password){
+      return next(new ErrorHandler("please enter email and password",400))
+    }
+    const user=await UserModel.findOne({email}).select("+password");
+    if(!user){
+      return next(new ErrorHandler("invalid email or password", 400));
+    }
+
+    const isPasswordMatch=await user.comparePassword(password);
+    if(!isPasswordMatch){
+      return next(new ErrorHandler("invalid email or password", 400))
+    }
+
+    sendToken(user,200,res);
+
+    
+
+    
+  } catch (error:any) {
+    return next(new ErrorHandler(error.message, 400))
     
   }
 })
