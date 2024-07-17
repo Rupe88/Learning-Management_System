@@ -10,6 +10,8 @@ import sendMail from "../utils/sendMail";
 import { accessTokenOptions, refreshTokenOptions, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
 import { getUSerById } from "../services/userService";
+import cloudinary from "cloudinary";
+
 
 //register user
 interface IRegistration {
@@ -357,4 +359,60 @@ export const updatePassword=CatchAsyncError(async(req:Request, res:Response, nex
     
   }
 
+})
+
+//update profile picture or avatar
+
+interface IUpdateProfilePicture{
+  avatar:string;
+}
+export const updateProfilePicture=CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+  try {
+   const {avatar}=req.body as IUpdateProfilePicture;
+   const userId=req.user?._id;
+   const user=await UserModel.findById(userId);
+if(avatar && user){
+  //if user have on avatar call this if
+  
+
+
+  if(user?.avatar?.public_id){
+    //delete the old img
+
+    await cloudinary.v2.uploader.destroy(user?.avatar?.public_id)
+
+    const myCloud=await cloudinary.v2.uploader.upload(avatar,{
+      folder:"avatars",
+      width:150,
+    });
+    user.avatar={
+      public_id:myCloud.public_id,
+      url:myCloud.secure_url,
+
+    }
+   }else{
+    const myCloud=await cloudinary.v2.uploader.upload(avatar,{
+      folder:"avatars",
+      width:150,
+    });
+    user.avatar={
+      public_id:myCloud.public_id,
+      url:myCloud.secure_url,
+
+    }
+
+   }
+}
+await user?.save();
+await redis.set(userId as string, JSON.stringify(user))
+
+res.status(200).json({
+  success:true,
+  user,
+})
+    
+  } catch (error:any) {
+    return next(new ErrorHandler(error.message, 400))
+    
+  }
 })
