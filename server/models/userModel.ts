@@ -93,7 +93,7 @@ userSchema.methods.SignAccessToken = async function () {
 
 userSchema.methods.SignRefreshToken = async function () {
   return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || '',{
-    expiresIn:"7d"
+    expiresIn:"3d"
   });
 };
 
