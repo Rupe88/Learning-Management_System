@@ -8,6 +8,7 @@ import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/sendMail";
 import { sendToken } from "../utils/jwt";
+import { redis } from "../utils/redis";
 
 //register user
 interface IRegistration {
@@ -149,7 +150,7 @@ interface ILoginRequest{
   password:string;
 
 }
-
+//login user
 export const loginUSer=CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
   try {
     const {email, password}=req.body as ILoginRequest;
@@ -176,3 +177,24 @@ export const loginUSer=CatchAsyncError(async(req:Request, res:Response, next:Nex
     
   }
 })
+
+//logout user
+export const logoutUser=CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+  try {
+    res.cookie("access_token", "", {maxAge:1})
+    res.cookie("refresh_token", "", {maxAge:1})
+const userId=req.user?._id || ''
+    redis.del(userId);
+
+    res.status(200).json({
+      message:"Logged Out SuccessFully",
+      success:true
+
+    })
+    
+  } catch (error:any) {
+    return next(new ErrorHandler(error.message, 400))
+    
+  }
+})
+
