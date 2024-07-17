@@ -15,16 +15,17 @@ interface ITokenOptions{
  export const accessTokenExpire=parseInt(process.env.ACCESS_TOKEN_EXPIRE || '300',10)
     const refreshTokenExpire=parseInt(process.env.REFRESH_TOKEN_EXPIRE || '1200',10)
 
-    //options for cookies
+    //options for cookies => 5m
     export const accessTokenOptions:ITokenOptions={
         expires:new Date(Date.now() + accessTokenExpire *60*60* 1000),
         maxAge:accessTokenExpire*60*60*1000,
         httpOnly:true,
         sameSite:'lax'
     };
+    // 3 day
     export const refreshTokenOptions:ITokenOptions={
-        expires:new Date(Date.now() + accessTokenExpire *24*60*60* 1000),
-        maxAge:accessTokenExpire *24*60*60*1000,
+        expires:new Date(Date.now() + refreshTokenExpire *24*60*60* 1000),
+        maxAge:refreshTokenExpire *24*60*60*1000,
         httpOnly:true,
         sameSite:'lax'
     }
