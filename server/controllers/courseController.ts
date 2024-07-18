@@ -5,7 +5,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 import { createCourse } from "../services/courseService";
 import CourseModel from "../models/courseModel";
 require("dotenv").config();
-
+//upload course
 export const uploadCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -65,3 +65,19 @@ export const editCourse = CatchAsyncError(
       }
     }
   );
+
+  //get single course
+  export const getSingleCourse=CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+    try {
+        const course=await CourseModel.findById(req.params.id).select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links")
+res.status(200).json({
+  success:true,
+  course,
+})
+        
+    } catch (error:any) {
+
+          return next(new ErrorHandler(error.message, 404));
+        
+    }
+  })
