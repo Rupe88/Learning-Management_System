@@ -1,6 +1,11 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 require("dotenv").config();
 
+interface IThumbnail {
+  public_id: string;
+  url: string;
+}
+
 interface IComment extends Document {
   user: object;
   comment: string;
@@ -18,11 +23,12 @@ interface ILink extends Document {
   title: string;
   url: string;
 }
+
 interface ICourseData extends Document {
   title: string;
   description: string;
   videoUrl: string;
-  videoThumbnail: object;
+  videoThumbnail: IThumbnail;
   videoSection: string;
   videoLength: number;
   videoPlayer: string;
@@ -36,7 +42,7 @@ interface ICourse extends Document {
   description?: string;
   price: number;
   estimatedPrice: number;
-  thumbnail: object;
+  thumbnail: IThumbnail;
   tags: string;
   level: string;
   demoUrl: string;
@@ -75,6 +81,10 @@ const courseDataSchema = new Schema<ICourseData>({
   description: String,
   videoLength: Number,
   videoPlayer: String,
+  videoThumbnail: {
+    public_id: String,
+    url: String,
+  },
   links: [linkSchema],
   suggestion: String,
   questions: [commentSchema],
@@ -98,39 +108,43 @@ const courseSchema = new Schema<ICourse>({
   },
   thumbnail: {
     public_id: {
-      // required: true,
       type: String,
+      // required: true,
     },
-    url: String,
+    url: {
+      type: String,
+      required: true,
+    },
   },
-  tags:{
-    required:true,
-    type:String
+  tags: {
+    required: true,
+    type: String,
   },
-  level:{
-    type:String,
-    required:true
+  level: {
+    type: String,
+    required: true,
   },
-  demoUrl:{
-    type:String,
-    required:true
+  demoUrl: {
+    type: String,
+    required: true,
   },
-  benifits:[{
-    title:String
+  benifits: [{
+    title: String,
   }],
-  prerequisites:[{title:String}],
-  reviews:[reviewSchema],
-  courseData:[courseDataSchema],
-  ratings:{
-    type:Number,
-    default:0
+  prerequisites: [{
+    title: String,
+  }],
+  reviews: [reviewSchema],
+  courseData: [courseDataSchema],
+  ratings: {
+    type: Number,
+    default: 0,
   },
-  purchased:{
-    type:Number,
-    default:0
-  }
+  purchased: {
+    type: Number,
+    default: 0,
+  },
 });
 
-
-const CourseModel:Model<ICourse>=mongoose.model("Course", courseSchema);
+const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
 export default CourseModel;
