@@ -7,10 +7,11 @@ interface IThumbnail {
   url: string;
 }
 
-interface IComment extends Document {
+export interface IComment extends Document {
   user: IUser;
   question: string;
   questionReplies?: IComment[];
+  answerReplies:IComment[]
 }
 
 interface IReview extends Document {

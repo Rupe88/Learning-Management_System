@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 import path from "path";
 import ejs from "ejs"
 import sendMail from "../utils/sendMail";
+import NotificationModel from "../models/notificationModel";
 require("dotenv").config();
 //upload course
 export const uploadCourse = CatchAsyncError(
@@ -195,6 +196,13 @@ export const addQuestion = CatchAsyncError(async (req: Request, res: Response, n
     //add this questions to our course content
     courseContent.questions.push(newQuestion);
 
+    
+   await NotificationModel.create({
+    user:req.user?._id,
+    title:"New Question Received",
+    message:`You have new Question from ${courseContent.title}`
+   });
+
     //save the updated course
     await course?.save();
 
@@ -249,13 +257,21 @@ export const addAnswer=CatchAsyncError(async(req:Request, res:Response, next:Nex
      }
 
      //add this answer to our course content
-     //@ts-ignore
+   
      question.answerReplies.push(newAnswer);
 
      await course?.save();
 
      if(req.user?._id===question.user._id){
       //create a notification model 
+
+      await NotificationModel.create({
+        user:req.user?._id,
+        title:"New Question Reply Received",
+        message:`You have a new Question Reply in ${courseContent.title}`
+
+      })
+
 
 
      }else{
