@@ -26,6 +26,7 @@ interface ILink extends Document {
 }
 
 interface ICourseData extends Document {
+
   title: string;
   description: string;
   videoUrl: string;
@@ -38,7 +39,8 @@ interface ICourseData extends Document {
   questions: IComment[];
 }
 
-interface ICourse extends Document {
+export interface ICourse extends Document {
+  _id:string
   name: string;
   description?: string;
   price: number;
@@ -111,11 +113,11 @@ const courseSchema = new Schema<ICourse>({
   thumbnail: {
     public_id: {
       type: String,
-      // required: true,
+      // required: true, // This can be uncommented if needed
     },
     url: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   tags: {
@@ -147,6 +149,7 @@ const courseSchema = new Schema<ICourse>({
     default: 0,
   },
 });
+
 
 const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
 export default CourseModel;

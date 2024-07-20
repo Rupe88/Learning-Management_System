@@ -7,6 +7,7 @@ import { Request, Response, NextFunction } from "express";
 import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/userRoute";
 import courseRouter from "./routes/courseRoute";
+import orderRouter from "./routes/orderRoute"
 //middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -27,6 +28,7 @@ app.get("/test", (req: Request, res: Response, next: NextFunction) => {
 //api
 app.use("/api/auth", userRouter);
 app.use("/api/course", courseRouter);
+app.use("/api/order", orderRouter);
 
 //for unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
