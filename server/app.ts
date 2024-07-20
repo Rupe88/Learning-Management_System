@@ -29,7 +29,9 @@ app.get("/test", (req: Request, res: Response, next: NextFunction) => {
 //api
 app.use("/api/auth", userRouter);
 app.use("/api/course", courseRouter);
+app.use("/api/order", orderRouter);
 app.use("/api/notification", notificationRouter);
+
 
 //for unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

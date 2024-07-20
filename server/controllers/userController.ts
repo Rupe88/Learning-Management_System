@@ -9,7 +9,7 @@ import path from "path";
 import sendMail from "../utils/sendMail";
 import { accessTokenOptions, refreshTokenOptions, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getUSerById } from "../services/userService";
+import { getAllUsersService, getUSerById, updateUserRoleService } from "../services/userService";
 import cloudinary from "cloudinary";
 
 
@@ -407,6 +407,35 @@ res.status(200).json({
   success:true,
   user,
 })
+    
+  } catch (error:any) {
+    return next(new ErrorHandler(error.message, 400))
+    
+  }
+});
+
+
+//get all the users
+export const getAllusers=CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+  try {
+
+    getAllUsersService(res);
+    
+  } catch (error:any) {
+    return next(new ErrorHandler(error.message, 400))
+    
+  }
+});
+
+
+//upadate user roles
+export const updateUserRole=CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+  try {
+
+    const {id, role}=req.body;
+    updateUserRoleService(res, id, role);
+    
+
     
   } catch (error:any) {
     return next(new ErrorHandler(error.message, 400))

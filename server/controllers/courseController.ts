@@ -2,7 +2,7 @@ import cloudinary from "cloudinary";
 import { Request, Response, NextFunction } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
-import { createCourse } from "../services/courseService";
+import { createCourse, getAllCoursesService } from "../services/courseService";
 import CourseModel from "../models/courseModel";
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
@@ -402,6 +402,18 @@ review.commentReplies.push(replyData);
     })
   } catch (error:any) {
     return next(new ErrorHandler(error.message, 500));
+    
+  }
+})
+
+//get all the courses --only for admin
+export const getAllusers=CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+  try {
+
+    getAllCoursesService(res);
+    
+  } catch (error:any) {
+    return next(new ErrorHandler(error.message, 400))
     
   }
 })
