@@ -9,6 +9,7 @@ import userRouter from "./routes/userRoute";
 import courseRouter from "./routes/courseRoute";
 import orderRouter from "./routes/orderRoute"
 import analyticsRouter from "./routes/analyticsRoute"
+import layoutRouter from "./routes/layoutRoute"
 
 import notificationRouter from "./routes/notificationRoute"
 //middleware
@@ -34,6 +35,7 @@ app.use("/api/course", courseRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/notification", notificationRouter);
 app.use("/api/analytics",analyticsRouter);
+app.use("/api/layout", layoutRouter)
 
 
 //for unknown route
