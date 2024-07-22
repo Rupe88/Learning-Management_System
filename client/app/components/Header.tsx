@@ -38,61 +38,57 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
   };
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative mb-4">
       <div
-        className={`${
+        className={`fixed top-0 left-0 w-full h-[80px] z-[80] border-b transition-all duration-300 ease-in-out ${
           active
-            ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#fffff] shadow-xl transition duration-500"
-            : "w-full border-b dark:border-[#ffff] h-[80px] z-[80] dark:shadow"
+            ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black bg-white shadow-xl"
+            : "bg-transparent dark:bg-gray-900"
         }`}
       >
-        <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full">
-          <div className="w-full h-full flex items-center justify-between p-3">
-            <div className="flex items-center">
-              <Link
-                href={"/"}
-                className="text-[20px] sm:text-[25px] font-Poppins font-[500] text-black dark:text-white"
-              >
-                LMS
-              </Link>
-            </div>
-            <div className="flex items-center">
-              <NavItems activeItem={activeItem} isMobile={false} />
-              <ThemeSwitcher />
-              {/* only for mobile */}
-              <div className="800px:hidden">
-                <HiOutlineMenuAlt3
-                  size={25}
-                  className="cursor-pointer dark:text-white text-black"
-                  onClick={() => setOpenSidebar(true)}
-                />
-              </div>
-              <HiOutlineUserCircle
+        <div className="w-full max-w-screen-xl mx-auto py-2 h-full flex items-center justify-between px-4">
+          <div className="flex items-center">
+            <Link
+              href={"/"}
+              className="text-[20px] sm:text-[25px] font-Poppins font-[500] text-black dark:text-white"
+            >
+              LMS
+            </Link>
+          </div>
+          <div className="flex items-center space-x-4">
+            <NavItems activeItem={activeItem} isMobile={false} />
+            <ThemeSwitcher />
+            {/* Only for mobile */}
+            <div className="block 800px:hidden">
+              <HiOutlineMenuAlt3
                 size={25}
-                className="hidden 800px:block cursor-pointer dark:text-white text-black"
-                onClick={() => setOpen(true)}
+                className="cursor-pointer dark:text-white text-black transition-transform duration-300 transform hover:scale-110"
+                onClick={() => setOpenSidebar(true)}
               />
             </div>
+            <HiOutlineUserCircle
+              size={25}
+              className="hidden 800px:block cursor-pointer dark:text-white text-black transition-transform duration-300 transform hover:scale-110"
+              onClick={() => setOpen(true)}
+            />
           </div>
         </div>
 
-        {/* mobile sidebar */}
+        {/* Mobile sidebar */}
         {openSidebar && (
           <div
             className="fixed w-full h-screen top-0 left-0 z-[99999] dark:bg-[unset] bg-[#00000024]"
             onClick={handleClose}
             id="screen"
           >
-            <div className="w-[70%] fixed z-[99999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0 p-5">
+            <div className="w-[80%] max-w-[350px] fixed z-[99999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0 p-5 transition-transform duration-300 transform translate-x-0">
               <NavItems activeItem={activeItem} isMobile={true} />
               <HiOutlineUserCircle
                 size={25}
-                className="cursor-pointer ml-5 my-2 text-black dark:text-white"
+                className="cursor-pointer ml-5 my-2 text-black dark:text-white transition-transform duration-300 transform hover:scale-110"
                 onClick={() => setOpen(true)}
               />
-              <br />
-              <br />
-              <p className="text-[16px] px-2 pl-5 text-black dark:text-white">
+              <p className="text-[16px] px-2 pl-5 text-black dark:text-white mt-auto">
                 Copyright &copy; 2024 LMS
               </p>
             </div>
