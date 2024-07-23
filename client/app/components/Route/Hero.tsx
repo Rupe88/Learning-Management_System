@@ -9,7 +9,7 @@ const people = [
     id: 1,
     name: "John Doe",
     designation: "Software Engineer",
-    image: "/assets/rupes.jpg",
+    image: "/assets/man.jpg",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const people = [
     id: 3,
     name: "Jane Smith",
     designation: "Data Scientist",
-    image: "/assets/rupes.jpg",
+    image: "/assets/girl1.png",
   },
   // Uncomment if needed
   // {
@@ -89,7 +89,7 @@ const Hero: FC<Props> = () => {
             10k+ Students Already Trusted Us
            
           </p>
-          <Link href={"/"} className="text-blue-400 mt-2 ml-2">
+          <Link href={"/"} className="text-[#39c1f3] mt-2 ml-2">
             View Courses
           </Link>
           
