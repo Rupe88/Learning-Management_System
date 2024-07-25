@@ -29,7 +29,7 @@ const SignUp: FC<Props> = ({ setRoute }) => {
     initialValues: {name:"", email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
-      console.log(email, password);
+      setRoute("Verification")
     },
   });
 
@@ -107,7 +107,7 @@ const SignUp: FC<Props> = ({ setRoute }) => {
           <h5 className="text-sm font-Poppins text-gray-700 dark:text-gray-300">Or join with</h5>
           <div className="flex items-center justify-center my-3">
             <FcGoogle size={30} className="cursor-pointer mx-2" />
-            <AiFillGithub size={30} className="cursor-pointer mx-2" />
+            <AiFillGithub size={30} className="cursor-pointer mx-2 text-white" />
           </div>
           <h5 className="text-sm font-Poppins text-gray-700 dark:text-gray-300">
             Dont have an account?{" "}
