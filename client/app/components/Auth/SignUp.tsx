@@ -15,17 +15,18 @@ type Props = {
 };
 
 const schema = Yup.object().shape({
+    name: Yup.string().required("Please Enter Your Name"),
   email: Yup.string()
     .email("Invalid email!")
     .required("Please enter Your Email"),
   password: Yup.string().required("Please enter Your Password").min(6),
 });
 
-const Login: FC<Props> = ({ setRoute }) => {
+const SignUp: FC<Props> = ({ setRoute }) => {
   const [show, setShow] = useState(false);
 
   const formik = useFormik({
-    initialValues: { email: "", password: "" },
+    initialValues: {name:"", email: "", password: "" },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
       console.log(email, password);
@@ -35,8 +36,23 @@ const Login: FC<Props> = ({ setRoute }) => {
   const { errors, touched, values, handleChange, handleSubmit } = formik;
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
-      <h1 className={`${styles.title}`}>Login with LMS</h1>
+      <h1 className={`${styles.title}`}>Join to LMS</h1>
       <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+        <label className={`${styles.label}`}>Enter Your Name</label>
+        <input
+          type="text"
+          name="name"
+          value={values.name}
+          onChange={handleChange}
+          id="name"
+          placeholder="John"
+          className={`${errors.name && touched.name ? "border-red-500" : "border-gray-300"} ${styles.input}`}
+        />
+        {errors.name && touched.name && (
+          <span className="text-red-500 pt-2 block">{errors.name}</span>
+        )}
+        </div>
         <label className={`${styles.label}`}>Enter Your Email</label>
         <input
           type="email"
@@ -74,15 +90,16 @@ const Login: FC<Props> = ({ setRoute }) => {
               onClick={() => setShow(false)}
             />
           )}
-         
+          
         </div>
         {errors.password && touched.password && (
             <span className="text-red-500 pt-2 block">{errors.password}</span>
           )}
+      
         <div className="w-full mt-5">
           <input
             type="submit"
-            value="Login"
+            value="Sign Up"
             className={`${styles.button} hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-300`}
           />
         </div>
@@ -96,9 +113,9 @@ const Login: FC<Props> = ({ setRoute }) => {
             Dont have an account?{" "}
             <span
               className="text-blue-500 dark:text-blue-400 cursor-pointer"
-              onClick={() => setRoute("Sign-Up")}
+              onClick={() => setRoute("Login")}
             >
-              Sign Up
+             Login
             </span>
           </h5>
         </div>
@@ -107,6 +124,6 @@ const Login: FC<Props> = ({ setRoute }) => {
   );
 };
 
-export default Login;
+export default SignUp;
 
 
