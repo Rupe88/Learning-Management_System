@@ -31,11 +31,11 @@ export const registerUSer = CatchAsyncError(
         );
       }
 
-      // //what if email exists ??
-      // const isEmailExist = await UserModel.findOne({ email });
-      // if (isEmailExist) {
-      //   return next(new ErrorHandler("email already exists", 400));
-      // }
+      //what if email exists ??
+      const isEmailExist = await UserModel.findOne({ email });
+      if (isEmailExist) {
+        return next(new ErrorHandler("email already exists", 400));
+      }
       //suppose user have name email and password
       const user: IRegistration = {
         name,

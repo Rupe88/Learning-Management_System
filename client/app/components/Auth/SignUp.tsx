@@ -1,57 +1,69 @@
-"use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  AiFillGithub,
-  AiOutlineEye,
-  AiOutlineEyeInvisible,
-} from "react-icons/ai";
+import { AiFillGithub, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { styles } from "../../../app/styles/style";
 import { FcGoogle } from "react-icons/fc";
+import { useRegisterMutation } from "../../../redux/features/auth/authApi";
+import toast from "react-hot-toast";
 
 type Props = {
   setRoute: (route: string) => void;
 };
 
 const schema = Yup.object().shape({
-    name: Yup.string().required("Please Enter Your Name"),
-  email: Yup.string()
-    .email("Invalid email!")
-    .required("Please enter Your Email"),
+  name: Yup.string().required("Please Enter Your Name"),
+  email: Yup.string().email("Invalid email!").required("Please enter Your Email"),
   password: Yup.string().required("Please enter Your Password").min(6),
 });
 
 const SignUp: FC<Props> = ({ setRoute }) => {
   const [show, setShow] = useState(false);
+  const [register, { error, isLoading, data, isError, isSuccess }] = useRegisterMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.message || "Registration Successful";
+      toast.success(message);
+      setRoute("Verification");
+    }
+    if (isError) {
+      if ("data" in error) {
+        const errorData = error as any;
+        toast.error(errorData.data.message);
+      }
+    }
+  }, [isSuccess, isError, data, error]);
 
   const formik = useFormik({
-    initialValues: {name:"", email: "", password: "" },
+    initialValues: { name: "", email: "", password: "" },
     validationSchema: schema,
-    onSubmit: async ({ email, password }) => {
-      setRoute("Verification")
+    onSubmit: async ({ name, email, password }) => {
+      const data = { name, email, password };
+      await register(data);
     },
   });
 
   const { errors, touched, values, handleChange, handleSubmit } = formik;
+
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg">
       <h1 className={`${styles.title}`}>Join to LMS</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-        <label className={`${styles.label}`}>Enter Your Name</label>
-        <input
-          type="text"
-          name="name"
-          value={values.name}
-          onChange={handleChange}
-          id="name"
-          placeholder="John"
-          className={`${errors.name && touched.name ? "border-red-500" : "border-gray-300"} ${styles.input}`}
-        />
-        {errors.name && touched.name && (
-          <span className="text-red-500 pt-2 block">{errors.name}</span>
-        )}
+          <label className={`${styles.label}`}>Enter Your Name</label>
+          <input
+            type="text"
+            name="name"
+            value={values.name}
+            onChange={handleChange}
+            id="name"
+            placeholder="John"
+            className={`${errors.name && touched.name ? "border-red-500" : "border-gray-300"} ${styles.input}`}
+          />
+          {errors.name && touched.name && (
+            <span className="text-red-500 pt-2 block">{errors.name}</span>
+          )}
         </div>
         <label className={`${styles.label}`}>Enter Your Email</label>
         <input
@@ -90,12 +102,10 @@ const SignUp: FC<Props> = ({ setRoute }) => {
               onClick={() => setShow(false)}
             />
           )}
-          
         </div>
         {errors.password && touched.password && (
-            <span className="text-red-500 pt-2 block">{errors.password}</span>
-          )}
-      
+          <span className="text-red-500 pt-2 block">{errors.password}</span>
+        )}
         <div className="w-full mt-5">
           <input
             type="submit"
@@ -110,12 +120,12 @@ const SignUp: FC<Props> = ({ setRoute }) => {
             <AiFillGithub size={30} className="cursor-pointer mx-2 text-white" />
           </div>
           <h5 className="text-sm font-Poppins text-gray-700 dark:text-gray-300">
-            Dont have an account?{" "}
+            Don’t have an account?{" "}
             <span
               className="text-blue-500 dark:text-blue-400 cursor-pointer"
               onClick={() => setRoute("Login")}
             >
-             Login
+              Login
             </span>
           </h5>
         </div>
@@ -125,5 +135,3 @@ const SignUp: FC<Props> = ({ setRoute }) => {
 };
 
 export default SignUp;
-
-
