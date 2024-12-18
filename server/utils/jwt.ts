@@ -53,6 +53,7 @@ export const sendToken=async(user:IUser, statusCode:number, res:Response)=>{
         message:true,
         user,
         accessToken,
+        
     })
 
 }
